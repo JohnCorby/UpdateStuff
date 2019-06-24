@@ -17,7 +17,6 @@ download(
     get('https://papermc.io/ci/job/Paper-1.14/lastSuccessfulBuild/artifact/paperclip.jar'),
     SERVER_DIR, 'server.jar'
 )
-exit()
 
 # plugman
 download(get('https://dev.bukkit.org/projects/plugman/files/latest'), PLUGIN_DIR)
