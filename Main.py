@@ -6,8 +6,12 @@ from Util import *
 SERVER_DIR = '..'
 
 # clear out plugins dir of jars
+DELETE_EXCLUSIONS = [
+    'Timber.jar'
+]
+
 for fp in os.listdir(PLUGIN_DIR):
-    if fp.endswith('.jar'):
+    if fp.endswith('.jar') and fp not in DELETE_EXCLUSIONS:
         fp = join(PLUGIN_DIR, fp)
         os.remove(fp)
         print('removed', fp)
