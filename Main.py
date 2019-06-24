@@ -48,8 +48,8 @@ url = 'http://builds.enginehub.org/job/worldedit/last-successful'
 d = PyQuery(get(url).content)
 
 file_url = d('.panel-body .list-unstyled a[href$=".jar"]')
-file_url = map(lambda e: urljoin(url, e.attrib['href']), file_url)
-# NOTE: this will always be the right bref
+file_url = map(lambda e: e.attrib['href'], file_url)
+# NOTE: this will always be the right href
 # alphabetical order means worldedit-bukkit comes first
 file_url = list(file_url)[0]
 
