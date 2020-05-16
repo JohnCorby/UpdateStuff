@@ -39,8 +39,9 @@ def get_file_name(res: requests.Response) -> str:
             return name
 
 
-def download(res: requests.Response, dir: str, name: str = None):
+def download(url: str, dir: str, name: str = None):
     """download file `name` to `dir` from `res`"""
+    res = get(url)
     if not name:
         name = get_file_name(res)
     path = join(dir, name)

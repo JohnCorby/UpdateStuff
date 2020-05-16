@@ -11,8 +11,14 @@ from UrlUtil import get, urljoin, download
 def server():
     """download server jar"""
     print('downloading server jar')
-    download(get('https://papermc.io/ci/job/Paper-1.15/lastSuccessfulBuild/artifact/paperclip.jar'),
+    download('https://papermc.io/ci/job/Paper-1.15/lastSuccessfulBuild/artifact/paperclip.jar',
              SERVER_DIR, 'server.jar')
+
+
+def plugin(url: str):
+    """download plugin jar"""
+    print('downloading plugin from', url)
+    download(url, PLUGIN_DIR)
 
 
 def bukkit(url: str):
@@ -22,7 +28,7 @@ def bukkit(url: str):
     dl_url = urljoin(url, 'files/latest')
     print('dl url is', dl_url)
 
-    download(get(dl_url), PLUGIN_DIR)
+    plugin(dl_url)
 
 
 def spigot(url: str):
@@ -35,7 +41,7 @@ def spigot(url: str):
     dl_url = urljoin(url, basename(dl_url))
     print('got dl url', dl_url)
 
-    download(get(dl_url), PLUGIN_DIR)
+    plugin(dl_url)
 
 
 def jenkins(url: str, *patterns: Pattern):
@@ -59,4 +65,4 @@ def jenkins(url: str, *patterns: Pattern):
     print('got matches', pformat(matches), sep='\n')
 
     for m in matches:
-        download(get(m), PLUGIN_DIR)
+        plugin(m)
