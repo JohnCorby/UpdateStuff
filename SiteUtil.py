@@ -1,6 +1,6 @@
+import re
 from os.path import basename
 from pprint import pformat
-from typing import Pattern
 
 from pyquery import PyQuery
 
@@ -13,12 +13,14 @@ def server():
     print('downloading server jar')
     download('https://papermc.io/ci/job/Paper-1.15/lastSuccessfulBuild/artifact/paperclip.jar',
              SERVER_DIR, 'server.jar')
+    print()
 
 
 def plugin(url: str):
     """download plugin jar"""
     print('downloading plugin from', url)
     download(url, PLUGIN_DIR)
+    print()
 
 
 def bukkit(url: str):
@@ -44,25 +46,24 @@ def spigot(url: str):
     plugin(dl_url)
 
 
-def jenkins(url: str, *patterns: Pattern):
-    """download plugin from jenkins site `url`, looking for files that match each pattern in `patterns`"""
+def jenkins(url: str, *patterns: str):
+    """download plugin from jenkins `url`, looking for files that match any `patterns` (case insensitive)"""
     print('jenkins on', url)
-    d = PyQuery(get(url).content)
 
     # find file list with latest releases
-    file_urls = d('.fileList a[href$=".jar"]')
-    file_urls = map(lambda e: urljoin(url, e.attrib['href']), file_urls)
+    d = PyQuery(get(url).content)
+    file_urls = d('.fileList a[href$=jar]')
+    file_urls = map(lambda x: urljoin(url, x.attrib['href']), file_urls)
     file_urls = list(file_urls)
-    print('got files', pformat(file_urls), sep='\n')
+    print('got files', pformat(file_urls))
 
     # match to patterns and download
-    matches = []
-    for p in patterns:
-        for u in file_urls:
-            if p.fullmatch(basename(u)):
-                matches.append(u)
-                break
-    print('got matches', pformat(matches), sep='\n')
+    matches = set()
+    for pattern in patterns:
+        for file_url in file_urls:
+            if re.fullmatch(pattern, basename(file_url), re.IGNORECASE):
+                print('pattern', pattern, 'matched', file_url)
+                matches.add(file_url)
 
-    for m in matches:
-        plugin(m)
+    for match in matches:
+        plugin(match)

@@ -1,7 +1,7 @@
 SERVER_DIR = 'server'
 PLUGIN_DIR = f'{SERVER_DIR}/plugins'
 
-from SiteUtil import spigot, bukkit, server, plugin
+from SiteUtil import spigot, bukkit, server, plugin, jenkins
 
 
 def download_all():
@@ -17,3 +17,6 @@ def download_all():
 
     # spigot test
     spigot('https://www.spigotmc.org/resources/coreprotect.8631/')
+
+    # jenkins test
+    jenkins('https://ci.lucko.me/view/LuckPerms/job/LuckPerms/', r'.*Bukkit-\d.*')
