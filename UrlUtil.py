@@ -33,8 +33,9 @@ def get_file_name(res: requests.Response) -> str:
     # check for filename in content-disposition header
     header = res.headers['content-disposition']
     if header:
-        matches = re.findall(r'filename="(.*)"', header)
+        matches = re.findall(r'filename=(.*)', header)
         name = matches[0]
+        name = name.strip('"')
         if name.endswith('.jar'):
             return name
 
