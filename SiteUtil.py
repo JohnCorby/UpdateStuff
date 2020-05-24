@@ -53,16 +53,15 @@ def jenkins(url: str, *patterns: str):
     # find file list with latest releases
     d = PyQuery(get(url).content)
     file_urls = d('.fileList a[href$=jar]')
-    file_urls = map(lambda x: urljoin(url, x.attrib['href']), file_urls)
-    file_urls = list(file_urls)
-    print('got files', pformat(file_urls))
+    file_urls = list(map(lambda x: urljoin(url, x.attrib['href']), file_urls))
+    print('got files', pformat(list(map(lambda x: basename(x), file_urls))))
 
     # match to patterns and download
     matches = set()
     for pattern in patterns:
         for file_url in file_urls:
             if re.fullmatch(pattern, basename(file_url), re.IGNORECASE):
-                print('pattern', pattern, 'matched', file_url)
+                print('pattern', pattern, 'matched', basename(file_url))
                 matches.add(file_url)
 
     for match in matches:
