@@ -2,8 +2,10 @@ import re
 from os import makedirs
 from os.path import basename, join
 
-import requests
 from cloudscraper import CloudScraper
+from requests import Response
+
+from Download import SERVER_DIR
 
 
 def urljoin(base: str, leaf: str) -> str:
@@ -16,13 +18,13 @@ def urljoin(base: str, leaf: str) -> str:
 scraper = CloudScraper()
 
 
-def get(url: str) -> requests.Response:
+def get(url: str) -> Response:
     """get a response from `url`"""
     # just always use cloudflare scraper, even if not required
     return scraper.get(url)
 
 
-def get_file_name(res: requests.Response) -> str:
+def get_file_name(res: Response) -> str:
     """get file name from `res`"""
     # res will be after all redirects
 
@@ -41,7 +43,7 @@ def get_file_name(res: requests.Response) -> str:
             return name
 
 
-def download(url: str, dir: str, name: str = None):
+def download(url: str, dir=f'{SERVER_DIR}/plugins', name: str = None):
     """download file `name` to `dir` from `res`"""
     res = get(url)
     if not name:
@@ -53,3 +55,4 @@ def download(url: str, dir: str, name: str = None):
     with open(path, 'wb') as f:
         f.write(res.content)
     print('done')
+    print()
