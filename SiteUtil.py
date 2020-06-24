@@ -60,7 +60,7 @@ def jenkins(url: str, *patterns: str):
     matches = set()
     for pattern in patterns:
         for file_url in file_urls:
-            if re.fullmatch(pattern, basename(file_url), re.IGNORECASE):
+            if re.match(pattern, basename(file_url), re.IGNORECASE):
                 print('pattern', pattern, 'matched', basename(file_url))
                 matches.add(file_url)
 

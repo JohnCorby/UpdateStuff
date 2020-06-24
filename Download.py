@@ -19,4 +19,4 @@ def download_all():
     spigot('https://www.spigotmc.org/resources/coreprotect.8631/')
 
     # jenkins test
-    jenkins('https://ci.lucko.me/view/LuckPerms/job/LuckPerms/', r'.*Bukkit-\d.*')
+    jenkins('https://ci.lucko.me/view/LuckPerms/job/LuckPerms/', r'bukkit-\d')

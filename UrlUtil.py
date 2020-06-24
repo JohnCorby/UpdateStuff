@@ -1,4 +1,5 @@
 import re
+from os import makedirs
 from os.path import basename, join
 
 import requests
@@ -48,6 +49,7 @@ def download(url: str, dir: str, name: str = None):
     path = join(dir, name)
 
     print('downloading', res.url, 'to', path)
+    makedirs(dir, exist_ok=True)
     with open(path, 'wb') as f:
         f.write(res.content)
     print('done')
