@@ -1,18 +1,16 @@
+import os
 import re
-from os import makedirs
-from os.path import basename, join
 
-from cloudscraper import CloudScraper
+from cloudscraper import CloudScraper, CloudflareChallengeError
 from requests import Response
 
 from Download import SERVER_DIR
 
 
-def urljoin(base: str, leaf: str) -> str:
-    """join 2 parts of urls with '/'"""
-    base = base.replace('\\', '/').strip('/')
-    leaf = leaf.replace('\\', '/').strip('/')
-    return f'{base}/{leaf}'
+def join(*parts: str) -> str:
+    """join `parts` with '/'"""
+    parts = list(map(lambda x: x.replace('\\', '/').strip('/'), parts))
+    return '/'.join(parts)
 
 
 scraper = CloudScraper()
@@ -20,8 +18,13 @@ scraper = CloudScraper()
 
 def get(url: str) -> Response:
     """get a response from `url`"""
-    # just always use cloudflare scraper, even if not required
-    return scraper.get(url)
+    global scraper
+    while True:
+        try:
+            return scraper.get(url)
+        except CloudflareChallengeError:
+            print("challenge error. retrying")
+            scraper = CloudScraper()
 
 
 def get_file_name(res: Response) -> str:
@@ -29,7 +32,7 @@ def get_file_name(res: Response) -> str:
     # res will be after all redirects
 
     # check for valid filename in url
-    name = basename(res.url)
+    name = os.path.basename(res.url)
     if name.endswith('.jar'):
         return name
 
@@ -43,15 +46,46 @@ def get_file_name(res: Response) -> str:
             return name
 
 
-def download(url: str, dir=f'{SERVER_DIR}/plugins', name: str = None):
-    """download file `name` to `dir` from `res`"""
+def strip_version(name: str) -> str:
+    """remove version info from `path`"""
+    name, ext = os.path.splitext(name)
+    name = re.sub(r'[\d.]|snapshot', '', name, flags=re.IGNORECASE)
+    return name + ext
+
+
+def remove_existing(path: str):
+    """
+    find existing file and remove it
+    checks for name without version
+    """
+    dir = os.path.dirname(path)
+
+    for existing in os.listdir(dir):
+        if not existing.endswith('jar'): continue
+        existing = join(dir, existing)
+
+        if strip_version(existing) == strip_version(path):
+            print('removing existing', existing)
+            os.remove(existing)
+            return
+
+
+PLUGIN_DIR = f'{SERVER_DIR}/plugins'
+
+
+def download(url: str, dir=PLUGIN_DIR, name: str = None):
+    """
+    download file `name` to `dir` from `res`
+    or dont if version is the same
+    """
     res = get(url)
     if not name:
         name = get_file_name(res)
     path = join(dir, name)
 
     print('downloading', res.url, 'to', path)
-    makedirs(dir, exist_ok=True)
+    os.makedirs(dir, exist_ok=True)
+    remove_existing(path)
     with open(path, 'wb') as f:
         f.write(res.content)
     print('done')
