@@ -16,7 +16,6 @@ def auto(url: str, dir=PLUGIN_DIR, name: str = None):
     try:
         try:
             download(url, dir, name)
-            return
         except BadUrlError:
             if 'https://www.spigotmc.org/resources/' in url:
                 spigot(url, dir, name)
