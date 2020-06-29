@@ -29,3 +29,4 @@ def download_from_file(path: str):
         auto(url, dir, f'{name}.jar')
     except:
         traceback.print_exc()
+        print()

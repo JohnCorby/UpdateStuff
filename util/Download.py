@@ -27,6 +27,7 @@ def auto(url: str, dir=PLUGIN_DIR, name: str = None):
                 raise RuntimeError(f'cant figure out how to auto download {url}')
     except:
         traceback.print_exc()
+        print()
 
 
 def bukkit(url: str, dir=PLUGIN_DIR, name: str = None):
@@ -40,6 +41,7 @@ def bukkit(url: str, dir=PLUGIN_DIR, name: str = None):
         download(dl_url, dir, name)
     except:
         traceback.print_exc()
+        print()
 
 
 def spigot(url: str, dir=PLUGIN_DIR, name: str = None):
@@ -56,6 +58,7 @@ def spigot(url: str, dir=PLUGIN_DIR, name: str = None):
         download(dl_url, dir, name)
     except:
         traceback.print_exc()
+        print()
 
 
 def jenkins(url: str, *patterns: str, dir=PLUGIN_DIR, name: str = None):
@@ -83,6 +86,7 @@ def jenkins(url: str, *patterns: str, dir=PLUGIN_DIR, name: str = None):
             download(match, dir, name)
     except:
         traceback.print_exc()
+        print()
 
 
 class BadUrlError(Exception): pass
