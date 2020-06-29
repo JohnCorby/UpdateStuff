@@ -37,9 +37,6 @@ def get(url: str):
             print("challenge error. retrying")
 
 
-class NameNotFoundError(Exception): pass
-
-
 def get_file_name(res: Response):
     """get file name from `res`"""
     # res will be after all redirects
@@ -57,9 +54,6 @@ def get_file_name(res: Response):
         name = name.strip('"')
         if name.endswith('.jar'):
             return name
-
-    if not name:
-        raise NameNotFoundError(f'valid name not found for {res.url}')
 
 
 def remove_existing(path: str):

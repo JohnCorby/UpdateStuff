@@ -2,18 +2,18 @@ import glob
 import re
 import traceback
 
-from Manual import PLUGIN_DIR, SERVER_DIR, SERVER_JAR_NAME
-from util.Site import auto
+from Manual import PLUGIN_DIR, SERVER_DIR
+from util.Download import auto
 from util.Util import join, split
 
 
 def auto_download():
     """automatically download using url files"""
     print('auto downloading from url files')
-    download_from_file(join(SERVER_DIR, SERVER_JAR_NAME.replace('.jar', '.url')))
-
-    for path in glob.iglob(join(PLUGIN_DIR, "*.url")):
-        download_from_file(path)
+    for server_path in glob.iglob(join(SERVER_DIR, "*.url")):
+        download_from_file(server_path)
+    for plugin_path in glob.iglob(join(PLUGIN_DIR, "*.url")):
+        download_from_file(plugin_path)
 
 
 def download_from_file(path: str):
