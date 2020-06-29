@@ -15,16 +15,15 @@ def auto(url: str, dir=PLUGIN_DIR, name: str = None):
     print('auto on', url)
     try:
         try:
-            download(url, dir, name)
+            return download(url, dir, name)
         except BadUrlError:
             if 'https://www.spigotmc.org/resources/' in url:
-                spigot(url, dir, name)
+                return spigot(url, dir, name)
             elif 'https://dev.bukkit.org/projects/' in url:
-                bukkit(url, dir, name)
+                return bukkit(url, dir, name)
             elif '/job/' in url:
-                jenkins(url, dir=dir, name=name)
-            else:
-                raise RuntimeError(f'cant figure out how to auto download {url}')
+                return jenkins(url, dir=dir, name=name)
+        raise RuntimeError(f'cant figure out how to auto download {url}')
     except:
         traceback.print_exc()
         print()
