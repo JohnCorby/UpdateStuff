@@ -7,21 +7,22 @@ from pyquery import PyQuery
 
 from Manual import PLUGIN_DIR
 from util.Download import download
-from util.Util import join, get
+from util.Util import join, get, NameNotFoundError
 
 
 def auto(url: str, dir=PLUGIN_DIR, name: str = None):
     """download `url` to `dir`, doing specific automation based on what `url` is"""
     print('auto on', url)
     try:
-        if 'https://www.spigotmc.org/resources/' in url:
-            spigot(url, dir, name)
-        elif 'https://dev.bukkit.org/projects/' in url:
-            bukkit(url, dir, name)
-        elif '/job/' in url:
-            jenkins(url, dir=dir, name=name)
-        else:
+        try:
             download(url, dir, name)
+        except NameNotFoundError:
+            if 'https://www.spigotmc.org/resources/' in url:
+                spigot(url, dir, name)
+            elif 'https://dev.bukkit.org/projects/' in url:
+                bukkit(url, dir, name)
+            elif '/job/' in url:
+                jenkins(url, dir=dir, name=name)
     except:
         traceback.print_exc()
 
@@ -33,7 +34,10 @@ def bukkit(url: str, dir=PLUGIN_DIR, name: str = None):
     dl_url = join(url, 'files/latest')
     print('dl url is', dl_url)
 
-    download(dl_url, dir, name)
+    try:
+        download(dl_url, dir, name)
+    except:
+        traceback.print_exc()
 
 
 def spigot(url: str, dir=PLUGIN_DIR, name: str = None):

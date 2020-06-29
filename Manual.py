@@ -1,4 +1,5 @@
 SERVER_DIR = 'server'
+SERVER_JAR_NAME = 'server.jar'
 PLUGIN_DIR = f'{SERVER_DIR}/plugins'
 
 from util.Site import auto
@@ -6,7 +7,7 @@ from util.Site import auto
 
 def manual_download():
     return
-    auto('https://papermc.io/ci/job/Paper-1.16/lastSuccessfulBuild/artifact/paperclip.jar', SERVER_DIR, 'server.jar')
+    auto('https://papermc.io/ci/job/Paper-1.16/lastSuccessfulBuild/artifact/paperclip.jar', SERVER_DIR, SERVER_JAR_NAME)
 
     auto('https://www.spigotmc.org/resources/screamingbedwars-1-9-1-15.63714')
     auto('https://www.spigotmc.org/resources/commandspy.18498')

@@ -2,7 +2,7 @@ import glob
 import re
 import traceback
 
-from Manual import PLUGIN_DIR, SERVER_DIR
+from Manual import PLUGIN_DIR, SERVER_DIR, SERVER_JAR_NAME
 from util.Site import auto
 from util.Util import join, split
 
@@ -10,7 +10,7 @@ from util.Util import join, split
 def auto_download():
     """automatically download using url files"""
     print('auto downloading from url files')
-    download_from_file(join(SERVER_DIR, 'server.url'))
+    download_from_file(join(SERVER_DIR, SERVER_JAR_NAME.replace('.jar', '.url')))
 
     for path in glob.iglob(join(PLUGIN_DIR, "*.url")):
         download_from_file(path)
