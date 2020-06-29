@@ -1,2 +1,2 @@
 # UpdateStuff
-sort of hacky script for updating paper servers and plugins
+sort of hacky script for updating servers and their plugins
